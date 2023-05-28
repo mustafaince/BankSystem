@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="banking_systemModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="account">
+    <Key>
+      <PropertyRef Name="account_id" />
+    </Key>
+    <Property Name="account_id" Type="int" Nullable="false" />
+    <Property Name="customer_id" Type="int" Nullable="false" />
+    <Property Name="balance" Type="int" />
+  </EntityType>
+  <EntityType Name="customer">
+    <Key>
+      <PropertyRef Name="customer_id" />
+    </Key>
+    <Property Name="customer_id" Type="int" Nullable="false" />
+    <Property Name="name" Type="varchar" MaxLength="50" />
+    <Property Name="surname" Type="varchar" MaxLength="50" />
+    <Property Name="phonenum" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'banking_system.dbo.customer_transaction' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="customer_transaction">
+    <Key>
+      <PropertyRef Name="customer_id" />
+      <PropertyRef Name="transaction_id" />
+    </Key>
+    <Property Name="customer_id" Type="int" Nullable="false" />
+    <Property Name="transaction_id" Type="int" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'banking_system.dbo.online_account' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="online_account">
+    <Key>
+      <PropertyRef Name="online_account_id" />
+      <PropertyRef Name="customer_id" />
+      <PropertyRef Name="password" />
+    </Key>
+    <Property Name="online_account_id" Type="int" Nullable="false" />
+    <Property Name="customer_id" Type="int" Nullable="false" />
+    <Property Name="password" Type="int" Nullable="false" />
+    <Property Name="type" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'banking_system.dbo.transaction' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="transaction">
+    <Key>
+      <PropertyRef Name="transaction_id" />
+    </Key>
+    <Property Name="transaction_id" Type="int" Nullable="false" />
+    <Property Name="transaction_type" Type="varchar" MaxLength="50" />
+    <Property Name="date" Type="date" />
+    <Property Name="amount" Type="int" />
+  </EntityType>
+  <EntityContainer Name="banking_systemModelStoreContainer">
+    <EntitySet Name="account" EntityType="Self.account" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="customer" EntityType="Self.customer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="customer_transaction" EntityType="Self.customer_transaction" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [customer_transaction].[customer_id] AS [customer_id], 
+    [customer_transaction].[transaction_id] AS [transaction_id]
+    FROM [dbo].[customer_transaction] AS [customer_transaction]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="online_account" EntityType="Self.online_account" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [online_account].[online_account_id] AS [online_account_id], 
+    [online_account].[customer_id] AS [customer_id], 
+    [online_account].[password] AS [password], 
+    [online_account].[type] AS [type]
+    FROM [dbo].[online_account] AS [online_account]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="transaction" EntityType="Self.transaction" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [transaction].[transaction_id] AS [transaction_id], 
+    [transaction].[transaction_type] AS [transaction_type], 
+    [transaction].[date] AS [date], 
+    [transaction].[amount] AS [amount]
+    FROM [dbo].[transaction] AS [transaction]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>
